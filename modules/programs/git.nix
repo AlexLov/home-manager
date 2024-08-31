@@ -222,6 +222,8 @@ in {
           '';
         };
 
+        package = mkPackageOption pkgs "difftastic" { };
+
         background = mkOption {
           type = types.enum [ "light" "dark" ];
           default = "light";
@@ -478,11 +480,11 @@ in {
     })
 
     (mkIf cfg.difftastic.enable {
-      home.packages = [ pkgs.difftastic ];
+      home.packages = [ cfg.difftastic.package ];
 
       programs.git.iniContent = let
         difftCommand = concatStringsSep " " [
-          "${pkgs.difftastic}/bin/difft"
+          "${cfg.difftastic.package}/bin/difft"
           "--color ${cfg.difftastic.color}"
           "--background ${cfg.difftastic.background}"
           "--display ${cfg.difftastic.display}"
